@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-from typing import List, Tuple
 
 def sort_pts(points):
     sorted_pts = np.zeros((4, 2), dtype="float32")
@@ -41,36 +40,25 @@ class ImgLoader:
 
     def insert_img(self, img_path : str):
         subject_image = cv2.imread(img_path)
-
-        
-        #cv2.imshow("test", subject_image)
         h_subject, w_subject = subject_image.shape[:2]
 
         pts1 = np.float32([[0, 0], [w_subject, 0], [w_subject, h_subject], [0, h_subject]])
         pts2 = np.float32(self.sorted_pts)
 
-        # Get the transformation matrix and use it to get the warped image of the subject
         transformation_matrix = cv2.getPerspectiveTransform(pts1, pts2)
         warped_img = cv2.warpPerspective(subject_image, transformation_matrix, (self.w_base, self.h_base))
 
-        # Create a mask
         mask = np.zeros(self.base_image.shape, dtype=np.uint8)
         roi_corners = np.int32(self.sorted_pts)
         
-        # Fill in the region selected with white color
         filled_mask = mask.copy()
         cv2.fillConvexPoly(filled_mask, roi_corners, (255, 255, 255))
 
-        # Invert the mask color
         inverted_mask = cv2.bitwise_not(filled_mask)
 
-        # Bitwise AND the mask with the base image
         masked_image = cv2.bitwise_and(self.base_image, inverted_mask)
-
-
-
-        # Using Bitwise OR to merge the two images
         output = cv2.bitwise_or(warped_img, masked_image)
+
         # cv2.imshow('Fused Image', output)
         name_result = "output_" + img_path[:-4] + ".png"
         cv2.imwrite(name_result, output)
@@ -81,4 +69,3 @@ class ImgLoader:
 imgLoader = ImgLoader("./base.jpg")
 imgLoader.init_points()
 imgLoader.insert_img("./subjects/Karimou.png")
-print("IMG WRITTEN")
