@@ -4,7 +4,7 @@ import cv2
 from utils import (
     sort_pts,
     get_closest_point_index,
-    create_overlayed_image
+    screen_web_page
 )
 
 class ImgLoader:
@@ -69,7 +69,7 @@ class ImgLoader:
         cv2.waitKey(0)
 
     
-    def insert_img(self, img_path : str) -> None:
+    def insert_img(self, img_path : str) -> str:
         subject_image = cv2.imread(img_path)
         h_subject, w_subject = subject_image.shape[:2]
 
@@ -89,21 +89,31 @@ class ImgLoader:
 
         masked_image = cv2.bitwise_and(self.base_image, inverted_mask)
         output = cv2.bitwise_or(warped_img, masked_image)
+        cv2.resize(output, (int(0.2 * self.w_base), int(0.2 * self.h_base)))
 
         name_result = self.path_output_img + "output_" + img_path.split("/")[-1]
         cv2.imwrite(name_result, output)
         cv2.destroyAllWindows()
+        return name_result
+
+    def create_overlayed_image_from_website(
+        self,
+        website_url      : str,
+        path_website_img : str = "tmp_website.png"
+    ) -> None:
+        screen_web_page(website_url, path_website_img)
+        return self.insert_img(path_website_img)
 
 
 
 #path_base_img = askopenfilename(title= 'Select the background image')
 #path_dir_subjects = askdirectory(title= 'Select the directory of the subject images')
-path_base_img = "./base.jpg"
-imgLoader = ImgLoader(path_base_img)
-imgLoader.init_points()
-imgLoader.adjust_points()
-imgLoader.insert_img("./subjects/Karimou.png")
+# path_base_img = "./base.jpg"
+# imgLoader = ImgLoader(path_base_img)
+# imgLoader.init_points()
+# imgLoader.adjust_points()
+# imgLoader.insert_img("./subjects/Karimou.png")
 
-# create_overlayed_image(imgLoader, "https://sideral.ai")
+# imgLoader.create_overlayed_image("https://sideral.ai")
 
-quit()
+# quit()
