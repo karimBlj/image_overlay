@@ -1,0 +1,7 @@
+{
+    "path_base_img"        : "./base.jpg",
+    "folder_img_generated" : "./campaigns/2024-07-19_truck_transportation_uae/generated/",
+    "path_leads_file"      : "./campaigns/2024-07-19_truck_transportation_uae/leads.csv",
+    "path_email_template"  : "./campaigns/2024-07-19_truck_transportation_uae/template.html",
+    "path_result_report"   : "./campaigns/2024-07-19_truck_transportation_uae/"
+}
