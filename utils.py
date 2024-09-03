@@ -6,6 +6,7 @@ import numpy as np
 from html2image import Html2Image
 from typing import List, Tuple, Dict
 import json
+import time
 import pandas as pd
 from glob import glob
 
@@ -43,6 +44,7 @@ def screen_web_page(website_url : str, dest_img : str) -> None:
     driver = webdriver.Safari()
     driver.set_window_size(1520, 880)
     driver.get(website_url)
+    time.sleep(3)
     driver.save_screenshot(dest_img)
     driver.quit()
 
@@ -62,18 +64,12 @@ def read_json_file(file_path : str) -> Dict:
 
 def load_email_content(
     file_path    : str,
-    img_url      : str,
-    company_name : str,
-    industry     : str,
+    **kwargs
 ) -> str:
     with open(file_path, 'r') as file:
         email_template = file.read()
     template = Template(email_template)
-    email = template.render(
-        img_url      = img_url,
-        company_name = company_name,
-        industry     = industry,
-    )
+    email = template.render(**kwargs)
     return email
 
 def load_history_campaigns():

@@ -24,7 +24,7 @@ def is_valid_email(email):
         server.set_debuglevel(0)
         server.connect(mx_record)
         server.helo(server.local_hostname)
-        server.mail('example@test.com')
+        server.mail('rimus@live.fr')
         code, message = server.rcpt(email)
         server.quit()
 
